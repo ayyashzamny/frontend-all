@@ -1,0 +1,46 @@
+.appointment-card {
+    background-color: #f8f9fa;
+    /* Light background color */
+    border-radius: 8px;
+    padding: 20px;
+    transition: box-shadow 0.3s ease;
+}
+
+.appointment-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    /* Hover shadow effect */
+}
+
+.card-body {
+    padding: 15px;
+}
+
+.card-text {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 15px;
+}
+
+.card-text i {
+    margin-right: 10px;
+}
+
+.status-buttons {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+}
+
+.badge {
+    font-size: 13px;
+    padding: 6px 12px;
+    border-radius: 5px;
+}
+
+.form-select {
+    width: 100%;
+    padding: 5px;
+    margin-top: 10px;
+    font-size: 14px;
+}

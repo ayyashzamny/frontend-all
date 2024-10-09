@@ -1,0 +1,56 @@
+/* src/styles/DoctorList.css */
+
+.doctor-card {
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+}
+
+.doctor-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.card-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.card-text {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.card .btn-primary {
+    background-color: #3497F9;
+    border-color: #3497F9;
+    transition: background-color 0.3s ease;
+}
+
+.card .btn-primary:hover {
+    background-color: #2d82e6;
+}
+
+.text-info {
+    color: #3497F9;
+}
+
+.me-2 {
+    margin-right: 0.5rem;
+}
+
+.mt-4 {
+    margin-top: 2rem;
+}
+
+.mb-4 {
+    margin-bottom: 2rem;
+}
+
+.search-bar {
+    margin-bottom: 20px;
+}
+
+.search-bar .input-group {
+    max-width: 400px;
+    margin: 0 auto;
+}

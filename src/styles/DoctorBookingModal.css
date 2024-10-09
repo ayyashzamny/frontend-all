@@ -1,0 +1,51 @@
+/* General button styling */
+.type-box,
+.date-box,
+.time-slot {
+    padding: 10px 15px;
+    margin: 5px;
+    /* Adjusted margin to control spacing between buttons */
+    font-size: 16px;
+    font-weight: bold;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Selected state styling */
+.type-box.selected,
+.date-box.selected,
+.time-slot.selected {
+    background-color: #3497f9;
+    color: white;
+    border-color: #3497f9;
+}
+
+/* Hover effect */
+.type-box:hover,
+.date-box:hover,
+.time-slot:hover {
+    background-color: #3497f9;
+    color: white;
+    border-color: #3497f9;
+}
+
+/* Disabled buttons for unavailable time slots */
+.time-slot[disabled] {
+    background-color: #f5f5f5;
+    color: #999;
+    border-color: #ddd;
+    cursor: not-allowed;
+}
+
+/* Container styling for the selection buttons */
+.selection-container,
+.date-box-container,
+.time-slot-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    /* Added gap for better button spacing */
+}

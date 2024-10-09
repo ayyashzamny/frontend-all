@@ -1,0 +1,9 @@
+/* src/styles/Footer.css */
+.footer {
+    background-color: #ffffff;
+    color: #6c757d;
+}
+
+.footer p {
+    margin: 0;
+}

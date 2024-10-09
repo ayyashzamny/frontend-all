@@ -1,0 +1,75 @@
+/* AdminTopbar.css */
+
+.admin-topbar {
+    background-color: #E6F2FF;
+    /* Light blue shade */
+    height: 60px;
+    width: calc(100% - 250px);
+    /* Subtracting sidebar width */
+    position: fixed;
+    top: 0;
+    left: 250px;
+    /* Match sidebar width */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    color: #3497f9;
+    /* Blue color */
+    z-index: 1;
+    transition: all 0.3s ease;
+}
+
+.topbar-title h4 {
+    margin: 0;
+    font-size: 20px;
+    color: #3497f9;
+    /* Accent color for the title */
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.topbar-user {
+    display: flex;
+    align-items: center;
+}
+
+.username {
+    margin-right: 15px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #3497f9;
+    /* Accent color for the username */
+    transition: color 0.3s ease;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid #3497f9;
+    /* Blue border */
+    transition: border-color 0.3s ease;
+}
+
+/* Hover effects for interactive elements */
+.admin-topbar:hover h4,
+.admin-topbar:hover .username {
+    color: #1d6ab9;
+    /* Darker blue on hover for title and username */
+}
+
+.user-avatar:hover {
+    border-color: #1d6ab9;
+    /* Darker blue on hover */
+}
+
+/* Optional: Add a divider between username and avatar */
+.username::after {
+    content: '';
+    display: inline-block;
+    width: 1px;
+    height: 25px;
+    background-color: #3497f9;
+    margin-left: 15px;
+}
