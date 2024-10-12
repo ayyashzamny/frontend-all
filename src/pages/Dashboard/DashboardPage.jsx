@@ -1,13 +1,14 @@
 import React from 'react';
 import AdminLayout from '../../components/AdminLayout';
-import PandingLeaves from './PendingLeaveRequests';
+import Dashboard from './Dashboard';
 
-const LeavePage = () => {
+
+const AddDoctorPage = () => {
     return (
         <AdminLayout>
-            <PandingLeaves />
+            <Dashboard />
         </AdminLayout>
     );
 };
 
-export default LeavePage;
+export default AddDoctorPage;

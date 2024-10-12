@@ -72,7 +72,7 @@ const EmployeesList = () => {
         <div className="container mt-4">
             <h2>Employees List</h2>
             <button className="btn btn-primary mb-3" onClick={() => handleOpenModal()}>+ Add Employee</button>
-            <button className="btn btn-secondary mb-3 ms-2" onClick={handleOpenAccountModal}>+ Create Account</button> {/* New button for account creation */}
+
             <table className="table table-bordered">
                 <thead>
                     <tr>

@@ -1,13 +1,23 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../styles/AdminSidebar.css'; // Sidebar custom styles
 import logo from '../assets/images/logo.png'; // Add your logo here
 
 const AdminSidebar = () => {
     const [isLeaveDropdownOpen, setIsLeaveDropdownOpen] = useState(false);
+    const navigate = useNavigate(); // Use navigate to redirect
 
     const toggleLeaveDropdown = () => {
         setIsLeaveDropdownOpen(!isLeaveDropdownOpen);
+    };
+
+    // Handle Logout function
+    const handleLogout = () => {
+        // Clear local storage (or any authentication tokens)
+        localStorage.removeItem('employee'); // Assuming 'employee' is the key for storing logged-in user data
+
+        // Redirect to login page
+        navigate('/login');
     };
 
     return (
@@ -71,10 +81,10 @@ const AdminSidebar = () => {
                     </ul>
                 </li>
                 <li>
-                    <Link to="/logout" className="nav-link">
+                    <button className="nav-link logout-button" onClick={handleLogout}>
                         <i className="fas fa-sign-out-alt"></i> {/* Logout icon */}
                         Logout
-                    </Link>
+                    </button>
                 </li>
             </ul>
         </div>

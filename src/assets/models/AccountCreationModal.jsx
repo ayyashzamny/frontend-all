@@ -27,7 +27,7 @@ const AccountCreationModal = ({ show, handleClose, employees }) => {
         }
 
         try {
-            await axios.post('http://localhost:5000/api/users', {
+            await axios.post('http://localhost:5000/api/register', {
                 email,
                 password,
                 role: 'employee',
@@ -36,8 +36,9 @@ const AccountCreationModal = ({ show, handleClose, employees }) => {
             Swal.fire('Success!', 'Account created successfully.', 'success');
             handleClose();
         } catch (error) {
-            console.error('Error creating account:', error);
-            Swal.fire('Error!', 'There was a problem creating the account.', 'error');
+            // Display the real SQL error message from the backend
+            const errorMessage = error.response?.data?.error || 'There was a problem creating the account.';
+            Swal.fire('Error!', errorMessage, 'error');
         }
     };
 

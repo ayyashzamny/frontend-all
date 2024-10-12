@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { format, parseISO } from 'date-fns';
-import { FaUser, FaCalendarAlt, FaClock, FaUserMd, FaMoneyBillAlt } from 'react-icons/fa';
 
 const AppointmentList = () => {
     const [appointments, setAppointments] = useState([]);
@@ -68,41 +67,38 @@ const AppointmentList = () => {
     return (
         <div className="container mt-4">
             <h2 className="mb-4">Appointments</h2>
-            <div className="row">
-                {appointments.length > 0 ? (
-                    appointments.map(appointment => (
-                        <div key={appointment.appointment_id} className="col-md-4 mb-4">
-                            <div className="appointment-card card shadow-sm">
-                                <div className="card-body">
-                                    <h5 className="card-title text-primary">Appointment</h5>
-                                    <p className="card-text">
-                                        <FaUser /> <strong>Patient:</strong> {appointment.patient_name}
-                                    </p>
-                                    <p className="card-text">
-                                        <FaUserMd /> <strong>Doctor:</strong> {appointment.doctor_name}
-                                    </p>
-                                    <p className="card-text">
-                                        <FaCalendarAlt /> <strong>Date:</strong> {formatDate(appointment.appointment_date)}
-                                    </p>
-                                    <p className="card-text">
-                                        <FaClock /> <strong>Time:</strong> {appointment.appointment_time}
-                                    </p>
-                                    <p className="card-text">
-                                        <FaMoneyBillAlt /> <strong>Payment:</strong> {renderPaymentBadge(appointment.payment_status)}
-                                        (${appointment.payment_amount.toFixed(2)})
-                                    </p>
-                                    <p><strong>Status:</strong> {renderStatusBadge(appointment.status)}</p>
-                                    <div className="mt-3">
-                                        {renderStatusOptions(appointment)}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    ))
-                ) : (
-                    <p>No appointments found.</p>
-                )}
-            </div>
+            {appointments.length > 0 ? (
+                <table className="table table-striped table-bordered">
+                    <thead className="thead-dark">
+                        <tr>
+                            <th>Patient Name</th>
+                            <th>Doctor Name</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Payment Status</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {appointments.map((appointment) => (
+                            <tr key={appointment.appointment_id}>
+                                <td>{appointment.patient_name}</td>
+                                <td>Dr. {appointment.doctor_name}</td>
+                                <td>{formatDate(appointment.appointment_date)}</td>
+                                <td>{appointment.appointment_time}</td>
+                                <td>{renderPaymentBadge(appointment.payment_status)}</td>
+                                <td>${appointment.payment_amount.toFixed(2)}</td>
+                                <td>{renderStatusBadge(appointment.status)}</td>
+                                <td>{renderStatusOptions(appointment)}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            ) : (
+                <p>No appointments found.</p>
+            )}
         </div>
     );
 };

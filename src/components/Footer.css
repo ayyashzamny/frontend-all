@@ -1,9 +1,94 @@
-/* src/styles/Footer.css */
-.footer {
-    background-color: #ffffff;
-    color: #6c757d;
+/* Ensure the html and body take full height */
+html,
+body {
+    height: 100%;
+    margin: 0;
 }
 
-.footer p {
+/* The main container (root) will take at least the full height of the viewport */
+#root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    /* Full viewport height */
+}
+
+/* The main content should grow to fill available space, pushing the footer down */
+main {
+    flex-grow: 1;
+    padding: 20px;
+    /* Optional: Add some padding for your main content */
+}
+
+/* Footer Styles */
+.footer {
+    background-color: #343a40;
+    color: #ffffff;
+    padding: 40px 0;
+    width: 100%;
+    box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.footer .footer-content {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.footer-section {
+    margin-bottom: 20px;
+}
+
+.footer h4 {
+    color: #f8f9fa;
+    margin-bottom: 15px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.footer ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer ul li {
+    margin-bottom: 10px;
+}
+
+.footer ul li a {
+    color: #adb5bd;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer ul li a:hover {
+    color: #f8f9fa;
+}
+
+.footer-bottom {
+    padding: 15px 0;
+    background-color: #23272b;
+    font-size: 14px;
+    text-align: center;
+    color: #adb5bd;
+}
+
+.footer-bottom p {
     margin: 0;
+    color: #adb5bd;
+}
+
+/* Responsive design for footer */
+@media (max-width: 768px) {
+    .footer .footer-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .footer .footer-section {
+        margin-bottom: 30px;
+    }
 }

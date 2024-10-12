@@ -1,14 +1,23 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import AdminLayout from '../../components/AdminLayout';
 
 const PendingLeaveRequests = () => {
     const [pendingRequests, setPendingRequests] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        fetchPendingLeaveRequests();
-    }, []);
+        // Check if the user is logged in and has the 'admin' role
+        const employee = JSON.parse(localStorage.getItem('employee'));
+
+        if (!employee || employee.role !== 'admin') {
+            navigate('/login'); // Redirect to login if not an admin
+        } else {
+            fetchPendingLeaveRequests(); // Fetch leave requests if the user is an admin
+        }
+    }, [navigate]);
 
     const fetchPendingLeaveRequests = async () => {
         try {

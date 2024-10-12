@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Button, Form, Row, Col } from 'react-bootstrap';  // Import Row and Col from Bootstrap
+import { Modal, Button, Form, Row, Col } from 'react-bootstrap'; // Import Row and Col from Bootstrap
+import Swal from 'sweetalert2'; // For showing alerts
 
 const EmployeeModal = ({ show, handleClose, employee, onSave, isViewing }) => {
     const [employeeData, setEmployeeData] = useState({
@@ -10,17 +11,20 @@ const EmployeeModal = ({ show, handleClose, employee, onSave, isViewing }) => {
         department: '',
         date_of_joining: '',
         salary: '',
-        leave_balance: ''
+        leave_balance: '',
+        password: '', // New field for password
+        confirm_password: '' // New field for confirm password
     });
 
     useEffect(() => {
         if (employee) {
-            // If there's a date_of_joining, format it correctly for the date input
             setEmployeeData({
                 ...employee,
                 date_of_joining: employee.date_of_joining
                     ? new Date(employee.date_of_joining).toISOString().slice(0, 10)
-                    : ''
+                    : '',
+                password: '', // Reset password when editing
+                confirm_password: '' // Reset confirm password when editing
             });
         }
     }, [employee]);
@@ -32,6 +36,14 @@ const EmployeeModal = ({ show, handleClose, employee, onSave, isViewing }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        // If adding a new employee, check if the passwords match
+        if (!employee && employeeData.password !== employeeData.confirm_password) {
+            Swal.fire('Error!', 'Passwords do not match!', 'error');
+            return;
+        }
+
+        // Pass the employee data to the onSave handler
         onSave(employeeData);
     };
 
@@ -157,6 +169,38 @@ const EmployeeModal = ({ show, handleClose, employee, onSave, isViewing }) => {
                             </Form.Group>
                         </Col>
                     </Row>
+
+                    {/* Password fields (only show when adding new employee) */}
+                    {!isViewing && !employee && (
+                        <>
+                            <Row>
+                                <Col md={6}>
+                                    <Form.Group className="mb-3">
+                                        <Form.Label>Password</Form.Label>
+                                        <Form.Control
+                                            type="password"
+                                            name="password"
+                                            value={employeeData.password}
+                                            onChange={handleChange}
+                                            required
+                                        />
+                                    </Form.Group>
+                                </Col>
+                                <Col md={6}>
+                                    <Form.Group className="mb-3">
+                                        <Form.Label>Confirm Password</Form.Label>
+                                        <Form.Control
+                                            type="password"
+                                            name="confirm_password"
+                                            value={employeeData.confirm_password}
+                                            onChange={handleChange}
+                                            required
+                                        />
+                                    </Form.Group>
+                                </Col>
+                            </Row>
+                        </>
+                    )}
 
                     {!isViewing && (
                         <Button variant="primary" type="submit">

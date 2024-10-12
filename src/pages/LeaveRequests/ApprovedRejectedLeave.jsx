@@ -1,13 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import AdminLayout from '../../components/AdminLayout';
 
 const ApprovedRejectedLeaveRequests = () => {
     const [approvedRejectedRequests, setApprovedRejectedRequests] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        fetchApprovedRejectedRequests();
-    }, []);
+        // Check if the user is logged in and has the 'admin' role
+        const employee = JSON.parse(localStorage.getItem('employee'));
+
+        if (!employee || employee.role !== 'admin') {
+            navigate('/login'); // Redirect to login if not an admin
+        } else {
+            fetchApprovedRejectedRequests(); // Fetch leave requests if the user is an admin
+        }
+    }, [navigate]);
 
     const fetchApprovedRejectedRequests = async () => {
         try {

@@ -3,6 +3,7 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import { format, addDays } from 'date-fns';
 import Swal from 'sweetalert2'; // Import SweetAlert2
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for login redirection
 import '../../styles/DoctorBookingModal.css'; // Import custom CSS
 
 const DoctorBookingModal = ({ show, handleClose, doctor }) => {
@@ -11,6 +12,21 @@ const DoctorBookingModal = ({ show, handleClose, doctor }) => {
     const [appointmentType, setAppointmentType] = useState('InPerson'); // Default to InPerson
     const [availableTimes, setAvailableTimes] = useState([]); // All possible times
     const [bookedTimes, setBookedTimes] = useState([]); // Track already booked time slots
+    const [isLoggedIn, setIsLoggedIn] = useState(false); // Check if the user is logged in
+    const [patient, setPatient] = useState(null); // Store logged-in patient details
+
+    const navigate = useNavigate(); // To redirect to login page if needed
+
+    useEffect(() => {
+        // Check if the patient is logged in
+        const storedPatient = localStorage.getItem('patient');
+        if (storedPatient) {
+            setIsLoggedIn(true);
+            setPatient(JSON.parse(storedPatient));
+        } else {
+            setIsLoggedIn(false);
+        }
+    }, []); // Run once when the modal is mounted
 
     useEffect(() => {
         if (selectedDate) {
@@ -60,14 +76,24 @@ const DoctorBookingModal = ({ show, handleClose, doctor }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        if (!patient) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'You need to login',
+                text: 'Please login to book an appointment.',
+                showConfirmButton: true,
+            });
+            return;
+        }
+
         const appointmentData = {
-            patient_id: 11, // Assuming a logged-in patient with ID 11
+            patient_id: patient.patient_id, // Get patient_id from the logged-in patient
             doctor_id: doctor.doctor_id,
             appointment_date: selectedDate,
             appointment_time: selectedTime,
             appointment_type: appointmentType,
             status: 'Pending',
-            payment_status: 'Pending',
+            payment_status: 'Paid',
             payment_amount: doctor.consultation_fee
         };
 
@@ -97,73 +123,79 @@ const DoctorBookingModal = ({ show, handleClose, doctor }) => {
                 <Modal.Title>Book Appointment with Dr. {doctor.name}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Form onSubmit={handleSubmit}>
-                    {/* Appointment Type Selection using buttons */}
-                    <Form.Group className="mb-3">
-                        <Form.Label>Select Appointment Type</Form.Label>
-                        <div className="selection-container">
-                            <button
-                                type="button"
-                                className={`type-box ${appointmentType === 'InPerson' ? 'selected' : ''}`}
-                                onClick={() => setAppointmentType('InPerson')}
-                            >
-                                InPerson
-                            </button>
-                            <button
-                                type="button"
-                                className={`type-box ${appointmentType === 'Virtual' ? 'selected' : ''}`}
-                                onClick={() => setAppointmentType('Virtual')}
-                            >
-                                Virtual
-                            </button>
-                        </div>
-                    </Form.Group>
-
-                    {/* Date selection in boxes */}
-                    <Form.Group className="mb-3">
-                        <Form.Label>Select Date</Form.Label>
-                        <div className="date-box-container">
-                            {getNextFiveDays().map((date) => (
+                {isLoggedIn ? (
+                    <Form onSubmit={handleSubmit}>
+                        {/* Appointment Type Selection using buttons */}
+                        <Form.Group className="mb-3">
+                            <Form.Label>Select Appointment Type</Form.Label>
+                            <div className="selection-container">
                                 <button
                                     type="button"
-                                    key={date}
-                                    className={`date-box ${selectedDate === format(date, 'yyyy-MM-dd') ? 'selected' : ''}`}
-                                    onClick={() => setSelectedDate(format(date, 'yyyy-MM-dd'))}
+                                    className={`type-box ${appointmentType === 'InPerson' ? 'selected' : ''}`}
+                                    onClick={() => setAppointmentType('InPerson')}
                                 >
-                                    {format(date, 'PPP')}
+                                    InPerson
                                 </button>
-                            ))}
-                        </div>
-                    </Form.Group>
-
-                    {/* Time slot selection */}
-                    {selectedDate && (
-                        <Form.Group className="mb-3">
-                            <Form.Label>Select Time</Form.Label>
-                            <div className="time-slot-container">
-                                {availableTimes.length > 0 ? (
-                                    availableTimes.map((time) => (
-                                        <button
-                                            type="button"
-                                            key={time}
-                                            className={`time-slot ${selectedTime === time ? 'selected' : ''}`}
-                                            onClick={() => setSelectedTime(time)}
-                                            disabled={bookedTimes.includes(time)} // Disable the button if the time is booked
-                                        >
-                                            {time} {bookedTimes.includes(time) ? '(Booked)' : ''}
-                                        </button>
-                                    ))
-                                ) : (
-                                    <p>No available time slots.</p>
-                                )}
+                                <button
+                                    type="button"
+                                    className={`type-box ${appointmentType === 'Virtual' ? 'selected' : ''}`}
+                                    onClick={() => setAppointmentType('Virtual')}
+                                >
+                                    Virtual
+                                </button>
                             </div>
                         </Form.Group>
-                    )}
 
-                    <Button variant="primary" type="submit" disabled={!selectedDate || !selectedTime}>
-                        Confirm Booking
-                    </Button>
-                </Form>
+                        {/* Date selection in boxes */}
+                        <Form.Group className="mb-3">
+                            <Form.Label>Select Date</Form.Label>
+                            <div className="date-box-container">
+                                {getNextFiveDays().map((date) => (
+                                    <button
+                                        type="button"
+                                        key={date}
+                                        className={`date-box ${selectedDate === format(date, 'yyyy-MM-dd') ? 'selected' : ''}`}
+                                        onClick={() => setSelectedDate(format(date, 'yyyy-MM-dd'))}
+                                    >
+                                        {format(date, 'PPP')}
+                                    </button>
+                                ))}
+                            </div>
+                        </Form.Group>
+
+                        {/* Time slot selection */}
+                        {selectedDate && (
+                            <Form.Group className="mb-3">
+                                <Form.Label>Select Time</Form.Label>
+                                <div className="time-slot-container">
+                                    {availableTimes.length > 0 ? (
+                                        availableTimes.map((time) => (
+                                            <button
+                                                type="button"
+                                                key={time}
+                                                className={`time-slot ${selectedTime === time ? 'selected' : ''}`}
+                                                onClick={() => setSelectedTime(time)}
+                                                disabled={bookedTimes.includes(time)} // Disable the button if the time is booked
+                                            >
+                                                {time} {bookedTimes.includes(time) ? '(Booked)' : ''}
+                                            </button>
+                                        ))
+                                    ) : (
+                                        <p>No available time slots.</p>
+                                    )}
+                                </div>
+                            </Form.Group>
+                        )}
+
+                        <Button variant="primary" type="submit" disabled={!selectedDate || !selectedTime}>
+                            Confirm Booking
+                        </Button>
+                    </Form>
+                ) : (
+                    <div className="login-reminder">
+                        <p>Please <button className="btn btn-link" onClick={() => navigate('/login')}>login</button> to book an appointment.</p>
+                    </div>
+                )}
             </Modal.Body>
         </Modal>
     );

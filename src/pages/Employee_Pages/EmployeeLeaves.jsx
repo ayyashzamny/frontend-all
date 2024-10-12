@@ -3,8 +3,10 @@ import axios from 'axios';
 import EmployeeHeader from './EmployeeHeader';  // Header for employee
 import Swal from 'sweetalert2';
 import { Modal, Button, Form } from 'react-bootstrap'; // Import Bootstrap components for modal and form
+import { useNavigate } from 'react-router-dom';
 
 const EmployeeLeaves = () => {
+    const navigate = useNavigate();
     const [leaves, setLeaves] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [selectedLeave, setSelectedLeave] = useState(null); // To store the leave selected for editing
@@ -15,17 +17,32 @@ const EmployeeLeaves = () => {
         reason: ''
     });
 
+    // Logged-in employee data from localStorage
+    const [employeeData, setEmployeeData] = useState(null);
+
     useEffect(() => {
-        fetchEmployeeLeaves();
-    }, []);
+        const storedEmployee = localStorage.getItem('employee');
+        if (storedEmployee) {
+            const employee = JSON.parse(storedEmployee);
+            setEmployeeData(employee);
+        } else {
+            navigate('/login'); // Redirect to login if not logged in
+        }
+    }, [navigate]);
+
+    useEffect(() => {
+        if (employeeData) {
+            fetchEmployeeLeaves();
+        }
+    }, [employeeData]);
 
     const fetchEmployeeLeaves = async () => {
         try {
             // Fetch all leave requests from the API
             const response = await axios.get('http://localhost:5000/api/leaverequests');
 
-            // Filter leave requests to show only those with employee_id = 2
-            const filteredLeaves = response.data.filter(leave => leave.employee_id === 2);
+            // Filter leave requests to show only those with employee_id of the logged-in employee
+            const filteredLeaves = response.data.filter(leave => leave.employee_id === employeeData.employee_id);
 
             setLeaves(filteredLeaves);  // Set filtered leaves
         } catch (error) {
