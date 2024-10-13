@@ -17,6 +17,8 @@ import Login from './pages/auth/Login'
 import Dashboard from './pages/Dashboard/DashboardPage';
 import PatientSignup from './pages/auth/PatientSignup';
 import MyBooking from './pages/Bookings/MyBooking';
+import AboutUs from './pages/Client Pages/AboutUs';
+import ContactUs from './pages/Client Pages/ContactUs';
 
 
 function App() {
@@ -37,6 +39,9 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/patient/signup" element={<PatientSignup />} />
         <Route path="/my-bookings" element={<MyBooking />} />
+        <Route path="/about" element={<AboutUs />} />
+        <Route path="/contact" element={<ContactUs />} />
+
       </Routes>
     </Router>
   );
