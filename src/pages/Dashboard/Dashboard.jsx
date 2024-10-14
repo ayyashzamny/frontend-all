@@ -105,37 +105,37 @@ const AdminDashboard = () => {
 
     return (
         <Container className="mt-5">
-            <Row>
+            <Row className="mb-4">
                 <Col md={3}>
-                    <Card className="mb-4 shadow-sm">
-                        <Card.Body>
+                    <Card className="shadow-sm">
+                        <Card.Body className="text-center">
                             <h5>Total Employees</h5>
                             <h2><Badge bg="primary">{employeeCount}</Badge></h2>
                         </Card.Body>
                     </Card>
                 </Col>
                 <Col md={3}>
-                    <Card className="mb-4 shadow-sm">
-                        <Card.Body>
+                    <Card className="shadow-sm">
+                        <Card.Body className="text-center">
                             <h5>Total Doctors</h5>
                             <h2><Badge bg="info">{doctorCount}</Badge></h2>
                         </Card.Body>
                     </Card>
                 </Col>
                 <Col md={3}>
-                    <Card className="mb-4 shadow-sm">
-                        <Card.Body>
+                    <Card className="shadow-sm">
+                        <Card.Body className="text-center">
                             <h5>Total Patients</h5>
                             <h2><Badge bg="success">{patientCount}</Badge></h2>
                         </Card.Body>
                     </Card>
                 </Col>
                 <Col md={3}>
-                    <Card className="mb-4 shadow-sm">
-                        <Card.Body>
+                    <Card className="shadow-sm">
+                        <Card.Body className="text-center">
                             <h5>Total Appointments</h5>
                             <h2><Badge bg="dark">{appointmentsCount}</Badge></h2>
-                            <h6>Pending Appointments: <Badge bg="warning">{pendingAppointments}</Badge></h6>
+                            <h6>Pending: <Badge bg="warning">{pendingAppointments}</Badge></h6>
                         </Card.Body>
                     </Card>
                 </Col>
@@ -143,18 +143,23 @@ const AdminDashboard = () => {
 
             <Row>
                 <Col md={6}>
-                    <Card className="mb-4 shadow-sm">
+                    <Card className="shadow-sm">
                         <Card.Body>
                             <h5>Leave Requests</h5>
-                            <Pie data={leavePieData} />
+                            {/* Reducing Pie chart size */}
+                            <div style={{ height: '200px', width: '200px', margin: '0 auto' }}>
+                                <Pie data={leavePieData} />
+                            </div>
                         </Card.Body>
                     </Card>
                 </Col>
                 <Col md={6}>
-                    <Card className="mb-4 shadow-sm">
+                    <Card className="shadow-sm">
                         <Card.Body>
                             <h5>Appointments Over Time</h5>
-                            <Line data={appointmentsLineData} />
+                            <div style={{ height: '300px' }}>
+                                <Line data={appointmentsLineData} />
+                            </div>
                         </Card.Body>
                     </Card>
                 </Col>
@@ -162,10 +167,10 @@ const AdminDashboard = () => {
 
             <Row>
                 <Col md={6}>
-                    <Card className="mb-4 shadow-sm">
+                    <Card className="shadow-sm">
                         <Card.Body>
                             <h5>Recent Appointments</h5>
-                            <Table striped bordered hover>
+                            <Table striped bordered hover responsive>
                                 <thead>
                                     <tr>
                                         <th>Patient</th>
@@ -190,10 +195,10 @@ const AdminDashboard = () => {
                 </Col>
 
                 <Col md={6}>
-                    <Card className="mb-4 shadow-sm">
+                    <Card className="shadow-sm">
                         <Card.Body>
                             <h5>Doctor Schedules</h5>
-                            <Table striped bordered hover>
+                            <Table striped bordered hover responsive>
                                 <thead>
                                     <tr>
                                         <th>Doctor</th>
