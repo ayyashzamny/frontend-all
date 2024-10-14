@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { FaStethoscope, FaDollarSign, FaClock, FaCalendarAlt, FaSearch } from 'react-icons/fa'; // Import icons
 import axios from 'axios';
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
+import Header from '../../../components/Header';
+import Footer from '../../../components/Footer';
 import DoctorBookingModal from './DoctorBookingModal'; // Import the booking modal component
-import '../../styles/AllDoctor.css'; // Import the CSS for styling
+import '../../../styles/AllDoctor.css'; // Import the CSS for styling
 
 const DoctorList = () => {
     const [doctors, setDoctors] = useState([]);
@@ -78,7 +78,7 @@ const DoctorList = () => {
                             <div key={doctor.doctor_id} className="col-md-4 mb-4">
                                 <div className="card doctor-card shadow-sm">
                                     <div className="card-body">
-                                        <h5 className="card-title text-primary">{doctor.name}</h5>
+                                        <h5 className="card-title text-primary">Dr. {doctor.name}</h5>
                                         <p className="card-text">
                                             <FaStethoscope className="me-2 text-info" />
                                             <strong>Specialty:</strong> {doctor.specialty}

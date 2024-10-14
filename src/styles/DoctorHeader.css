@@ -1,0 +1,15 @@
+/* src/components/Header.css */
+.logo-img {
+    height: 50px;
+}
+
+.nav-link {
+    font-weight: bold;
+    padding: 10px;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #3497F9;
+    /* Blue on hover */
+}

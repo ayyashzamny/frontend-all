@@ -41,6 +41,7 @@ h2 {
     display: flex;
     justify-content: space-between;
     margin-bottom: 15px;
+
 }
 
 .role-button {
@@ -51,6 +52,8 @@ h2 {
     cursor: pointer;
     width: 48%;
     text-align: center;
+    margin-left: 3px;
+    margin-right: 3px;
 }
 
 .role-button.active {

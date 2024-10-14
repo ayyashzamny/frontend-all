@@ -7,7 +7,7 @@ import Home from './pages/Client Pages/Home';
 import AddDoctorPage from './pages/Doctors/DoctorPage';
 import PatientsPage from './pages/Patients/PatientsPage';
 import AppointmentPage from './pages/Appointments/AppointmentPage';
-import AllDoctors from './pages/Bookings/AllDoctors';
+import AllDoctors from './pages/Client Pages/Bookings/AllDoctors';
 import EmployeeList from './pages/Employees/EmployeesPage';
 import PandingLeaves from './pages/LeaveRequests/PendingLeaveRequests';
 import ApprovedRejectedLeave from './pages/LeaveRequests/ApprovedRejectedLeave';
@@ -16,9 +16,13 @@ import EmployeeLeaves from './pages/Employee_Pages/EmployeeLeaves';
 import Login from './pages/auth/Login'
 import Dashboard from './pages/Dashboard/DashboardPage';
 import PatientSignup from './pages/auth/PatientSignup';
-import MyBooking from './pages/Bookings/MyBooking';
+import MyBooking from './pages/Client Pages/Bookings/MyBooking';
 import AboutUs from './pages/Client Pages/AboutUs';
 import ContactUs from './pages/Client Pages/ContactUs';
+import AddPrescription from './pages/Doctor_Pages/Add_Prescription';
+import PrescriptionList from './pages/Doctor_Pages/PrescriptionsList';
+import PatientCards from './pages/Doctor_Pages/PatientCards';
+import PatientPrescriptions from './pages/Client Pages/PatientPrescriptions';
 
 
 function App() {
@@ -41,10 +45,14 @@ function App() {
         <Route path="/my-bookings" element={<MyBooking />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/contact" element={<ContactUs />} />
-
+        <Route path="/add-prescription" element={<AddPrescription />} />
+        <Route path="/view-prescriptions" element={<PrescriptionList />} />
+        <Route path="/all-patients" element={<PatientCards />} />
+        <Route path="/PatientPrescriptions" element={<PatientPrescriptions />} />
       </Routes>
     </Router>
   );
 }
+
 
 export default App;

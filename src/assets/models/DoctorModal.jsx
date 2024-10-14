@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
+import Swal from 'sweetalert2'; // Import SweetAlert2 for alerts
 
 const DoctorModal = ({ show, handleClose, doctor, onSave, isViewing }) => {
     const [formData, setFormData] = useState({
@@ -11,24 +12,39 @@ const DoctorModal = ({ show, handleClose, doctor, onSave, isViewing }) => {
         email: '',
         phone: '',
         available_from: '',
-        available_to: ''
+        available_to: '',
+        password: '', // Password field for new doctor
+        confirm_password: '', // Confirm password field
     });
 
+    // Populate the form data when doctor data is provided (in edit mode)
     useEffect(() => {
         if (doctor) {
-            setFormData(doctor); // Populate modal with doctor data when viewing or editing
+            setFormData({
+                ...doctor,
+                password: '', // Clear password fields for security
+                confirm_password: '',
+            });
         }
     }, [doctor]);
 
     const handleChange = (e) => {
         setFormData({
             ...formData,
-            [e.target.name]: e.target.value
+            [e.target.name]: e.target.value,
         });
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        // Validate password only for new doctor creation (not for edit)
+        if (!doctor && formData.password !== formData.confirm_password) {
+            Swal.fire('Error!', 'Passwords do not match!', 'error');
+            return;
+        }
+
+        // Pass the form data back to the parent component
         onSave(formData);
     };
 
@@ -166,6 +182,38 @@ const DoctorModal = ({ show, handleClose, doctor, onSave, isViewing }) => {
                             readOnly={isViewing}
                         />
                     </Form.Group>
+
+                    {/* Password fields (only show when adding a new doctor) */}
+                    {!isViewing && !doctor && (
+                        <>
+                            <Row>
+                                <Col md={6}>
+                                    <Form.Group className="mb-3">
+                                        <Form.Label>Password</Form.Label>
+                                        <Form.Control
+                                            type="password"
+                                            name="password"
+                                            value={formData.password}
+                                            onChange={handleChange}
+                                            required
+                                        />
+                                    </Form.Group>
+                                </Col>
+                                <Col md={6}>
+                                    <Form.Group className="mb-3">
+                                        <Form.Label>Confirm Password</Form.Label>
+                                        <Form.Control
+                                            type="password"
+                                            name="confirm_password"
+                                            value={formData.confirm_password}
+                                            onChange={handleChange}
+                                            required
+                                        />
+                                    </Form.Group>
+                                </Col>
+                            </Row>
+                        </>
+                    )}
 
                     {!isViewing && (
                         <Modal.Footer>

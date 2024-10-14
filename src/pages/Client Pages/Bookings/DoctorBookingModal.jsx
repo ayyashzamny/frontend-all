@@ -4,7 +4,7 @@ import { format, addDays } from 'date-fns';
 import Swal from 'sweetalert2'; // Import SweetAlert2
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate for login redirection
-import '../../styles/DoctorBookingModal.css'; // Import custom CSS
+import '../../../styles/DoctorBookingModal.css'; // Import custom CSS
 
 const DoctorBookingModal = ({ show, handleClose, doctor }) => {
     const [selectedDate, setSelectedDate] = useState('');

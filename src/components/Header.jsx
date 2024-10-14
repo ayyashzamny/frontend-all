@@ -1,4 +1,3 @@
-// src/components/Header.js
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -14,7 +13,7 @@ const Header = () => {
         // Check if the user is logged in (either employee or patient)
         const employee = localStorage.getItem('employee');
         const patient = localStorage.getItem('patient');
-        setIsLoggedIn(!!employee || !!patient); // Set logged-in state
+        setIsLoggedIn(!!employee || !!patient); // Set logged-in state based on localStorage
     }, []);
 
     // Logout function
@@ -23,7 +22,9 @@ const Header = () => {
         localStorage.removeItem('employee');
         localStorage.removeItem('patient');
 
-        // Reload the page to reflect changes
+        // Redirect to home page after logging out
+        navigate('/');
+        // Optionally, reload the page to reflect changes
         window.location.reload();
     };
 
@@ -33,7 +34,15 @@ const Header = () => {
                 <Link className="navbar-brand" to="/">
                     <img src={logo} alt="Medical Appointment Logo" width="150" />
                 </Link>
-                <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <button
+                    className="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarNav"
+                    aria-controls="navbarNav"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+                >
                     <span className="navbar-toggler-icon"></span>
                 </button>
                 <div className="collapse navbar-collapse justify-content-center" id="navbarNav">
@@ -47,16 +56,20 @@ const Header = () => {
                         <li className="nav-item">
                             <Link className="nav-link text-primary" to="/book">Book Appointment</Link>
                         </li>
-                        {/* Conditionally render "My Bookings" link if logged in */}
+                        {/* Conditionally render "My Bookings" and "Prescriptions" links if logged in */}
                         {isLoggedIn && (
-                            <li className="nav-item">
-                                <Link className="nav-link text-primary" to="/my-bookings">My Bookings</Link>
-                            </li>
+                            <>
+                                <li className="nav-item">
+                                    <Link className="nav-link text-primary" to="/my-bookings">My Bookings</Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link className="nav-link text-primary" to="/PatientPrescriptions">Prescriptions</Link>
+                                </li>
+                            </>
                         )}
                         <li className="nav-item">
                             <Link className="nav-link text-primary" to="/contact">Contact</Link>
                         </li>
-
                     </ul>
                 </div>
                 {/* Show Logout or Login Button based on logged-in status */}

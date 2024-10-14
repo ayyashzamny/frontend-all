@@ -32,7 +32,7 @@ const LoginPage = () => {
                     // Redirect to employee dashboard if role is not admin
                     navigate('/employee/apply-leave');
                 }
-            } else {
+            } else if (role === 'patient') {
                 // Patient login API
                 response = await axios.post('http://localhost:5000/api/patient/login', { email, password });
 
@@ -42,6 +42,16 @@ const LoginPage = () => {
 
                 // Redirect to patient dashboard after login
                 navigate('/');
+            } else if (role === 'doctor') {
+                // Doctor login API
+                response = await axios.post('http://localhost:5000/api/doctor/login', { email, password });
+
+                // Store doctor data in localStorage
+                const doctor = response.data.doctor;
+                localStorage.setItem('doctor', JSON.stringify(doctor));
+
+                // Redirect to "Add Prescription" page after login
+                navigate('/add-prescription');
             }
         } catch (error) {
             setErrorMessage(error.response ? error.response.data.message : 'Login failed');
@@ -70,6 +80,13 @@ const LoginPage = () => {
                             onClick={() => setRole('patient')}
                         >
                             Patient
+                        </button>
+                        <button
+                            type="button"
+                            className={`role-button ${role === 'doctor' ? 'active' : ''}`}
+                            onClick={() => setRole('doctor')}
+                        >
+                            Doctor
                         </button>
                     </div>
                 </div>

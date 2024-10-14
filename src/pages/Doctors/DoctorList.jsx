@@ -35,30 +35,24 @@ const DoctorList = () => {
         setModalOpen(true);
     };
 
-    // Define the missing `handleSaveDoctor` function here
     const handleSaveDoctor = async (doctorData) => {
-        if (isEditing) {
-            // Updating an existing doctor
-            try {
+        try {
+            if (isEditing) {
+                // Update an existing doctor
                 await axios.put(`${apiBaseUrl}/api/doctors/${doctorData.doctor_id}`, doctorData);
                 setDoctors(doctors.map(doctor => doctor.doctor_id === doctorData.doctor_id ? doctorData : doctor));
                 Swal.fire('Success!', 'Doctor updated successfully.', 'success');
-            } catch (error) {
-                console.error('Error updating doctor:', error);
-                Swal.fire('Error!', 'There was a problem updating the doctor.', 'error');
-            }
-        } else {
-            // Adding a new doctor
-            try {
+            } else {
+                // Create a new doctor
                 const response = await axios.post(`${apiBaseUrl}/api/doctors`, doctorData);
                 setDoctors([...doctors, response.data]);
                 Swal.fire('Success!', 'Doctor added successfully.', 'success');
-            } catch (error) {
-                console.error('Error adding doctor:', error);
-                Swal.fire('Error!', 'There was a problem adding the doctor.', 'error');
             }
+            setModalOpen(false);
+        } catch (error) {
+            console.error('Error saving doctor:', error);
+            Swal.fire('Error!', 'There was a problem saving the doctor.', 'error');
         }
-        setModalOpen(false); // Close the modal after saving
     };
 
     return (
@@ -81,7 +75,7 @@ const DoctorList = () => {
                     {doctors.length > 0 ? (
                         doctors.map(doctor => (
                             <tr key={doctor.doctor_id}>
-                                <td>{doctor.name}</td>
+                                <td>Dr. {doctor.name}</td>
                                 <td>{doctor.specialty}</td>
                                 <td>{doctor.email}</td>
                                 <td>{doctor.phone}</td>

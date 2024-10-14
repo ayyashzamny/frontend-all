@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import Header from '../../components/Header'; // Import the Header component
-import Footer from '../../components/Footer'; // Import the Footer component
+import Header from '../../../components/Header'; // Import the Header component
+import Footer from '../../../components/Footer'; // Import the Footer component
 
 const PatientAppointments = () => {
     const [appointments, setAppointments] = useState([]);
