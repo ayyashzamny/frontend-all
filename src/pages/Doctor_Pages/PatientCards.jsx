@@ -127,7 +127,7 @@ const PatientCards = () => {
                                 <li key={index}>
                                     <strong>{prescription.medicine_name}</strong> - {prescription.dosage}, {prescription.frequency} <br />
                                     Date: {new Date(prescription.prescription_date).toLocaleDateString()} <br />
-                                    Status: {prescription.status}
+
                                 </li>
                             ))}
                         </ul>

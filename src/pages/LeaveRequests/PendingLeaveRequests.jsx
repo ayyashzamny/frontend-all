@@ -6,6 +6,7 @@ import AdminLayout from '../../components/AdminLayout';
 
 const PendingLeaveRequests = () => {
     const [pendingRequests, setPendingRequests] = useState([]);
+    const [employees, setEmployees] = useState([]); // Store employee data here
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -16,6 +17,7 @@ const PendingLeaveRequests = () => {
             navigate('/login'); // Redirect to login if not an admin
         } else {
             fetchPendingLeaveRequests(); // Fetch leave requests if the user is an admin
+            fetchEmployees(); // Fetch employee data
         }
     }, [navigate]);
 
@@ -26,6 +28,15 @@ const PendingLeaveRequests = () => {
             setPendingRequests(pending);
         } catch (error) {
             console.error('Error fetching leave requests', error);
+        }
+    };
+
+    const fetchEmployees = async () => {
+        try {
+            const response = await axios.get('http://localhost:5000/api/employees');
+            setEmployees(response.data); // Store employee data
+        } catch (error) {
+            console.error('Error fetching employee data', error);
         }
     };
 
@@ -61,6 +72,11 @@ const PendingLeaveRequests = () => {
         return date.toLocaleDateString();
     };
 
+    const getEmployeeName = (employeeId) => {
+        const employee = employees.find(emp => emp.employee_id === employeeId);
+        return employee ? employee.name : 'Unknown';
+    };
+
     return (
         <AdminLayout>
             <div className="container mt-4">
@@ -68,7 +84,7 @@ const PendingLeaveRequests = () => {
                 <table className="table table-bordered">
                     <thead>
                         <tr>
-                            <th>Employee ID</th>
+                            <th>Employee Name</th>
                             <th>Start Date</th>
                             <th>End Date</th>
                             <th>Leave Type</th>
@@ -80,7 +96,7 @@ const PendingLeaveRequests = () => {
                         {pendingRequests.length > 0 ? (
                             pendingRequests.map(request => (
                                 <tr key={request.leave_id}>
-                                    <td>{request.employee_id}</td>
+                                    <td>{getEmployeeName(request.employee_id)}</td> {/* Fetch and display employee name */}
                                     <td>{formatDate(request.start_date)}</td>
                                     <td>{formatDate(request.end_date)}</td>
                                     <td>{request.leave_type}</td>
@@ -103,7 +119,7 @@ const PendingLeaveRequests = () => {
                             ))
                         ) : (
                             <tr>
-                                <td colSpan="6">No pending leave requests</td>
+                                <td colSpan="7">No pending leave requests</td>
                             </tr>
                         )}
                     </tbody>

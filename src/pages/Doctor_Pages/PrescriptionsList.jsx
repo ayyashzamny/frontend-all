@@ -7,6 +7,8 @@ import Header from './DoctorHeader';
 
 const PrescriptionTable = () => {
     const [prescriptions, setPrescriptions] = useState([]);
+    const [patients, setPatients] = useState([]); // To store patient details
+    const [filteredPrescriptions, setFilteredPrescriptions] = useState([]); // To store filtered prescriptions for the logged-in doctor
     const [selectedPrescription, setSelectedPrescription] = useState(null); // To store the selected prescription for editing
     const [showEditModal, setShowEditModal] = useState(false); // Control modal visibility
     const navigate = useNavigate(); // Use navigate for redirection
@@ -17,9 +19,22 @@ const PrescriptionTable = () => {
             // If no doctor is found in localStorage, redirect to login page
             navigate('/login');
         } else {
-            axios.get(`http://localhost:5000/api/prescriptions?doctor_id=${doctor.doctor_id}`)
-                .then(response => setPrescriptions(response.data))
+            // Fetch prescriptions
+            axios.get(`http://localhost:5000/api/prescriptions`)
+                .then(response => {
+                    // Filter prescriptions that belong to the logged-in doctor
+                    const doctorPrescriptions = response.data.filter(prescription => prescription.doctor_id === doctor.doctor_id);
+                    setPrescriptions(doctorPrescriptions); // Set filtered prescriptions
+                    setFilteredPrescriptions(doctorPrescriptions);
+                })
                 .catch(error => console.error('Error fetching prescriptions:', error));
+
+            // Fetch patients
+            axios.get('http://localhost:5000/api/patients')
+                .then(response => {
+                    setPatients(response.data); // Store the patient data
+                })
+                .catch(error => console.error('Error fetching patients:', error));
         }
     }, [navigate]);
 
@@ -86,6 +101,12 @@ const PrescriptionTable = () => {
         return `${day}/${month}/${year}`;
     };
 
+    // Function to get the patient name by patient_id
+    const getPatientName = (patient_id) => {
+        const patient = patients.find(p => p.patient_id === patient_id);
+        return patient ? patient.name : 'Unknown'; // Return the patient name or 'Unknown' if not found
+    };
+
     // Predefined options for Dosage, Frequency, and Status
     const dosageOptions = ['1 tablet', '2 tablets', '5 ml', '10 ml', '1 injection'];
     const frequencyOptions = ['Once a day', 'Twice a day', 'Every 6 hours', 'Every 8 hours'];
@@ -104,27 +125,20 @@ const PrescriptionTable = () => {
                             <th>Dosage</th>
                             <th>Frequency</th>
                             <th>Date</th>
-                            <th>Status</th>
+
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {prescriptions.length > 0 ? (
-                            prescriptions.map((prescription) => (
+                        {filteredPrescriptions.length > 0 ? (
+                            filteredPrescriptions.map((prescription) => (
                                 <tr key={prescription.prescription_id}>
-                                    <td>{prescription.patient_name}</td>
+                                    <td>{getPatientName(prescription.patient_id)}</td> {/* Get the patient name */}
                                     <td>{prescription.medicine_name}</td>
                                     <td>{prescription.dosage}</td>
                                     <td>{prescription.frequency}</td>
                                     <td>{formatDate(prescription.prescription_date)}</td>
-                                    <td>
-                                        <Badge
-                                            pill
-                                            bg={prescription.status === 'Pending' ? 'warning' : 'success'}
-                                        >
-                                            {prescription.status}
-                                        </Badge>
-                                    </td>
+
                                     <td>
                                         <Button variant="warning" onClick={() => handleEditClick(prescription)}>
                                             Edit

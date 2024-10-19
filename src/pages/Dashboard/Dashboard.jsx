@@ -73,7 +73,7 @@ const AdminDashboard = () => {
 
     const fetchDoctorSchedules = async () => {
         try {
-            const scheduleRes = await axios.get('http://localhost:5000/api/doctors/schedules');
+            const scheduleRes = await axios.get('http://localhost:5000/api/doctors');
             setDoctorSchedules(scheduleRes.data);
         } catch (error) {
             console.error('Error fetching doctor schedules:', error);
@@ -209,7 +209,7 @@ const AdminDashboard = () => {
                                 <tbody>
                                     {doctorSchedules.map((schedule, index) => (
                                         <tr key={index}>
-                                            <td>{schedule.doctor_name}</td>
+                                            <td>Dr. {schedule.name}</td>
                                             <td>{schedule.available_from}</td>
                                             <td>{schedule.available_to}</td>
                                         </tr>

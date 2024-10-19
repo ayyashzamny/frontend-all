@@ -1,4 +1,3 @@
-// src/components/PatientPrescriptions.js
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -9,6 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'; // Ensure Bootstrap is imported
 
 const PatientPrescriptions = () => {
     const [prescriptions, setPrescriptions] = useState([]);
+    const [doctors, setDoctors] = useState([]); // To store the list of doctors
     const [loading, setLoading] = useState(true);
     const [patientName, setPatientName] = useState('');
     const navigate = useNavigate();
@@ -21,18 +21,25 @@ const PatientPrescriptions = () => {
         } else {
             const patientObj = JSON.parse(patient);
             setPatientName(patientObj.name);
-            fetchPatientPrescriptions(patientObj.patient_id); // Fetch prescriptions for the logged-in patient
+            fetchAllData(patientObj.patient_id); // Fetch all prescriptions and doctors
         }
     }, [navigate]);
 
-    // Fetch patient's prescriptions
-    const fetchPatientPrescriptions = async (patient_id) => {
+    // Fetch all prescriptions and doctors, then filter by patient_id
+    const fetchAllData = async (patient_id) => {
         try {
-            const response = await axios.get(`http://localhost:5000/api/patient-prescriptions/${patient_id}`);
-            setPrescriptions(response.data);
+            // Fetch all prescriptions
+            const prescriptionsResponse = await axios.get('http://localhost:5000/api/prescriptions');
+            const filteredPrescriptions = prescriptionsResponse.data.filter(prescription => prescription.patient_id === patient_id);
+
+            // Fetch all doctors
+            const doctorsResponse = await axios.get('http://localhost:5000/api/doctors');
+            setDoctors(doctorsResponse.data); // Store doctors list
+
+            setPrescriptions(filteredPrescriptions);
             setLoading(false);
         } catch (error) {
-            console.error('Error fetching prescriptions:', error);
+            console.error('Error fetching data:', error);
             setLoading(false);
         }
     };
@@ -40,6 +47,12 @@ const PatientPrescriptions = () => {
     // Format date into readable format
     const formatDate = (dateString) => {
         return new Date(dateString).toLocaleDateString();
+    };
+
+    // Function to get doctor name by doctor_id
+    const getDoctorName = (doctor_id) => {
+        const doctor = doctors.find(doc => doc.doctor_id === doctor_id);
+        return doctor ? doctor.name : 'Unknown'; // Return doctor name or 'Unknown' if not found
     };
 
     // Function to render status as a styled badge
@@ -69,7 +82,7 @@ const PatientPrescriptions = () => {
                                         <Card className="shadow-sm">
                                             <Card.Header>
                                                 <h3 className="mb-0">{prescription.medicine_name}</h3>
-                                                <small>Prescribed by: Dr. Joe</small>
+                                                <small>Prescribed by: Dr. {getDoctorName(prescription.doctor_id)}</small> {/* Display matched doctor's name */}
                                             </Card.Header>
                                             <Card.Body>
                                                 <p><strong>Dosage:</strong> {prescription.dosage}</p>
