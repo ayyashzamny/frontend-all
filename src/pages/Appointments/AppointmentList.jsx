@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import { format, parseISO } from 'date-fns';
+import { format, parseISO, addDays } from 'date-fns';
 
 const AppointmentList = () => {
     const [appointments, setAppointments] = useState([]);
+    const [filteredAppointments, setFilteredAppointments] = useState([]);
+    const [selectedDate, setSelectedDate] = useState('');
 
     useEffect(() => {
         fetchAppointments();
@@ -13,7 +15,9 @@ const AppointmentList = () => {
     const fetchAppointments = async () => {
         try {
             const response = await axios.get('http://localhost:5000/api/apointPaiDoc');
-            setAppointments(response.data);
+            const sortedAppointments = response.data.sort((a, b) => new Date(b.appointment_date) - new Date(a.appointment_date)); // Sort by date descending
+            setAppointments(sortedAppointments); // Set sorted appointments
+            setFilteredAppointments(sortedAppointments); // Initially show all appointments
         } catch (error) {
             console.error('Error fetching appointments:', error);
         }
@@ -64,10 +68,42 @@ const AppointmentList = () => {
         </select>
     );
 
+    // Generate next 5 days including today
+    const getNextFiveDays = () => {
+        const days = [];
+        for (let i = 0; i <= 5; i++) {
+            days.push(addDays(new Date(), i));
+        }
+        return days;
+    };
+
+    // Filter appointments by selected date
+    const handleDateFilter = (date) => {
+        setSelectedDate(date);
+        const filtered = appointments.filter(
+            (appointment) => format(new Date(appointment.appointment_date), 'yyyy-MM-dd') === format(new Date(date), 'yyyy-MM-dd')
+        );
+        setFilteredAppointments(filtered);
+    };
+
     return (
         <div className="container mt-4">
             <h2 className="mb-4">Appointments</h2>
-            {appointments.length > 0 ? (
+
+            {/* Date Filter Buttons */}
+            <div className="date-filter-buttons mb-4">
+                {getNextFiveDays().map((date) => (
+                    <button
+                        key={date}
+                        className={`btn btn-primary m-2 ${selectedDate === format(date, 'yyyy-MM-dd') ? 'active' : ''}`}
+                        onClick={() => handleDateFilter(date)}
+                    >
+                        {format(date, 'PPP')}
+                    </button>
+                ))}
+            </div>
+
+            {filteredAppointments.length > 0 ? (
                 <table className="table table-striped table-bordered">
                     <thead className="thead-dark">
                         <tr>
@@ -82,7 +118,7 @@ const AppointmentList = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {appointments.map((appointment) => (
+                        {filteredAppointments.map((appointment) => (
                             <tr key={appointment.appointment_id}>
                                 <td>{appointment.patient_name}</td>
                                 <td>Dr. {appointment.doctor_name}</td>
@@ -97,7 +133,7 @@ const AppointmentList = () => {
                     </tbody>
                 </table>
             ) : (
-                <p>No appointments found.</p>
+                <p>No appointments found for the selected date.</p>
             )}
         </div>
     );

@@ -4,6 +4,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import Header from '../../../components/Header'; // Import the Header component
 import Footer from '../../../components/Footer'; // Import the Footer component
+import '../../../styles/PatientAppointments.css'; // Create a custom CSS file for styling the table
 
 const PatientAppointments = () => {
     const [appointments, setAppointments] = useState([]);
@@ -71,9 +72,14 @@ const PatientAppointments = () => {
     };
 
     const renderStatusBadge = (status) => {
-        if (status === 'Confirmed') return <span className="text-success">Confirmed</span>;
-        if (status === 'Cancelled') return <span className="text-danger">Cancelled</span>;
-        return <span className="text-warning">Pending</span>;
+        if (status === 'Confirmed') {
+            return <span className="status-badge confirmed">Confirmed</span>;
+        } else if (status === 'Cancelled') {
+            return <span className="status-badge cancelled">Cancelled</span>;
+        } else if (status === 'Pending') {
+            return <span className="status-badge pending">Pending</span>;
+        }
+        return <span className="status-badge unknown">Unknown</span>;
     };
 
     return (
@@ -87,22 +93,22 @@ const PatientAppointments = () => {
                 ) : (
                     <>
                         {appointments.length > 0 ? (
-                            <div className="table-responsive">
-                                <table className="table table-striped table-bordered">
-                                    <thead className="thead-dark">
+                            <div className="table-container">
+                                <table className="custom-table">
+                                    <thead>
                                         <tr>
                                             <th>Doctor</th>
                                             <th>Date</th>
                                             <th>Time</th>
                                             <th>Amount</th>
                                             <th>Status</th>
-                                            <th>Action</th> {/* Add Action column */}
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {appointments.map((appointment) => (
                                             <tr key={appointment.appointment_id}>
-                                                <td>{appointment.doctor_name || 'N/A'}</td>
+                                                <td>Dr. {appointment.doctor_name || 'N/A'}</td>
                                                 <td>{formatDate(appointment.appointment_date)}</td>
                                                 <td>{appointment.appointment_time}</td>
                                                 <td>${appointment.payment_amount.toFixed(2)}</td>
@@ -110,7 +116,7 @@ const PatientAppointments = () => {
                                                 <td>
                                                     {appointment.status === 'Pending' && (
                                                         <button
-                                                            className="btn btn-danger btn-sm"
+                                                            className="delete-btn"
                                                             onClick={() => handleDelete(appointment.appointment_id)}
                                                         >
                                                             Delete
