@@ -88,7 +88,7 @@ const PatientPrescriptions = () => {
                                                 <p><strong>Dosage:</strong> {prescription.dosage}</p>
                                                 <p><strong>Frequency:</strong> {prescription.frequency}</p>
                                                 <p><strong>Date:</strong> {formatDate(prescription.prescription_date)}</p>
-                                                <p><strong>Status:</strong> {renderStatusBadge(prescription.status)}</p>
+
                                             </Card.Body>
                                         </Card>
                                     </Col>
